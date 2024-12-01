@@ -1,0 +1,35 @@
+#Configurator for PostgreSQL docker
+# Author: Simon Nguyen
+# See: https://hub.docker.com/_/postgres
+
+version: "3.8"
+
+services:
+  postgres:
+    image: postgres
+    restart: always
+    container_name: postgres
+    shm_size: 128mb
+    healthcheck:
+      interval: 10s
+      retries: 10
+      test: 'pg_isready -U "$$POSTGRES_USER" -d "$$POSTGRES_DB"'
+      timeout: 2s
+    ports:
+      - 5555:5432
+    environment:
+      POSTGRES_DB: postgres
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+
+    volumes:
+      - postgresql_db:/var/lib/postgresql/data
+
+    networks:
+      - postgresql_networks
+
+volumes:
+  postgresql_db:
+
+networks:
+  postgresql_networks:
